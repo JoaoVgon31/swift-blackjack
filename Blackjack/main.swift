@@ -36,15 +36,15 @@ func readIntInput() throws -> Int {
         -> jogador escolhe?
         -> somente com outra carta de valor 10 na mão inicial?
  
- Usar conjunto com cada carta, pegar valor pela posição limitado a 10
+ Usar conjunto com cada carta, pegar valor pela posição + 1 limitado a 10
  Gerar baralho a partir do dicionário repetindo cada entrada 4 vezes
  A marcado como valor 1, valor 11 com checagem em casos especiais
  */
 
-let cards: Array<String> = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Q", "J", "K"]
+let cards = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Q", "J", "K"]
 
 func generateGameCards(quantityOfDecks: Int = 1) -> Array<String> {
-    var generatedCards: Array<String> = []
+    var generatedCards = [String]()
     for _ in 1...quantityOfDecks {
         for card in cards {
             for _ in 1...4 {
@@ -55,7 +55,27 @@ func generateGameCards(quantityOfDecks: Int = 1) -> Array<String> {
     return generatedCards
 }
 
-var gameCards = generateGameCards(quantityOfDecks: 3)
+func getCardValue(card: String) -> Int {
+    let position = cards.firstIndex(of: card) ?? -1
+    if position >= 9 {
+        return 10
+    } else {
+        return position + 1
+    }
+}
+
+func takeCard(from cards: inout Array<String>, for hand: inout Array<String>) {
+    let position = Int.random(in: 0..<cards.count)
+    hand.append(cards[position])
+    cards.remove(at: position)
+}
+
+var gameCards = generateGameCards()
+var playerHand = [String]()
+var enemyHand = [String]()
+takeCard(from: &gameCards, for: &playerHand)
+takeCard(from: &gameCards, for: &playerHand)
 
 print(gameCards)
-print(gameCards.count)
+print(playerHand)
+print(getCardValue(card: "K"))
