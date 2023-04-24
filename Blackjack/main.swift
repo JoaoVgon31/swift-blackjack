@@ -45,6 +45,8 @@ class GameTable {
         let position = cards.firstIndex(of: card) ?? -1
         if position >= 9 {
             return 10
+        } else if position == 0 {
+            return 11
         } else {
             return position + 1
         }
@@ -123,7 +125,22 @@ class GameTable {
 class Player {
     var name: String = "Participante"
     var hand: Array<String> = []
-    var cardsTotal: Int = 0
+    var cardsTotal: Int = 0 {
+        didSet {
+            if cardsTotal > 21 {
+                var newValue = cardsTotal
+                for card in hand {
+                    if card == "A" {
+                        newValue -= 10
+                        if newValue <= 21 {
+                            cardsTotal = newValue
+                            break
+                        }
+                    }
+                }
+            }
+        }
+    }
     var stopped: Bool = false
     
     func readName() {
